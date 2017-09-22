@@ -1,0 +1,340 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 124,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Populating the interactive namespace from numpy and matplotlib\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import xml.etree.cElementTree as ET\n",
+    "import numpy as np\n",
+    "import os\n",
+    "\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "%matplotlib inline\n",
+    "%pylab inline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "\n",
+    "root = ET.Element(\"Annotations\" , MicronsPerPixel=\"0.233333\")\n",
+    "\n",
+    "doc = ET.SubElement(root, \"Annotation\",Id=\"1\", Name=\"\", ReadOnly=\"0\" ,NameReadOnly=\"0\" ,LineColorReadOnly=\"0\", Incremental=\"0\", Type=\"4\",LineColor=\"65280\", Visible=\"1\", Selected=\"1\" ,MarkupImagePath=\"\", MacroName=\"\")\n",
+    "docAttributes = ET.SubElement(doc, \"Attributes\")\n",
+    "docRegions = ET.SubElement(doc, \"Regions\")\n",
+    "docPlots = ET.SubElement(doc, \"Plots\")\n",
+    "\n",
+    "# doc Attributes\n",
+    "children = ET.Element(\"Attribute\",Name=\"Description\",Id=\"0\",Value=\"-\")\n",
+    "docAttributes.extend(children)\n",
+    "\n",
+    "tree = ET.ElementTree(root)\n",
+    "tree.write(\"filename.xml\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 114,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# load stats from cellprofiler pipeline generating the FOV annotations\n",
+    "\n",
+    "resultCPannotationImage = pd.read_csv(\"/home/osboxes/sharedWin/SubversionDev/HISTOLOGY_DATA_ANALYSIS/MyExpt_TISSUE_Image.csv\")\n",
+    "resultCPannotationAnnotations = pd.read_csv(\"/home/osboxes/sharedWin/SubversionDev/HISTOLOGY_DATA_ANALYSIS/MyExpt_TISSUE_FilteredCell.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 245,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "35_HES.mrxs\n",
+      "186\n",
+      "/home/osboxes/sharedSlides/Elton/35_HES.xml\n",
+      "[[306.0], [935.5]]\n",
+      "[[449.32057416267935], [814.07177033492815]]\n",
+      "[[411.0], [794.0]]\n",
+      "[[327.0], [834.5]]\n",
+      "[[369.0], [915.5]]\n",
+      "[[120.1875], [1101.075]]\n",
+      "[[306.0], [814.5]]\n",
+      "[[290.70945945945948], [816.72972972972957]]\n",
+      "[[411.0], [673.0]]\n",
+      "[[325.67317073170733], [1013.2243902439025]]\n",
+      "[[301.87878787878788], [1031.4772727272727]]\n",
+      "[[432.0], [854.5]]\n",
+      "[[368.93392070484572], [975.29074889867843]]\n",
+      "[[327.0], [753.60352422907488]]\n",
+      "[[450.0986547085202], [793.84753363228685]]\n",
+      "[[390.0], [834.5]]\n",
+      "[[450.28251121076232], [733.71748878923779]]\n",
+      "[[389.68859649122805], [955.03508771929808]]\n",
+      "[[390.0], [652.5]]\n",
+      "38_HES.mrxs\n",
+      "370\n",
+      "/home/osboxes/sharedSlides/Elton/38_HES.xml\n",
+      "[[226.9647577092511], [1066.5374449339206]]\n",
+      "[[266.5], [701.5]]\n",
+      "[[308.0], [559.5]]\n",
+      "[[371.0], [762.5]]\n",
+      "[[207.44859813084113], [1248.5]]\n",
+      "[[266.5], [944.5]]\n",
+      "[[350.0], [965.0]]\n",
+      "[[244.39461883408075], [1247.6591928251121]]\n",
+      "[[308.0], [1025.5]]\n",
+      "[[266.5], [762.5]]\n",
+      "[[287.0], [579.5]]\n",
+      "[[287.0], [559.5]]\n",
+      "[[225.0], [1248.5]]\n",
+      "[[433.0], [904.0]]\n",
+      "[[350.0], [640.5]]\n",
+      "[[412.0], [823.0]]\n",
+      "[[433.0], [883.5]]\n",
+      "[[391.5], [782.5]]\n",
+      "[[412.0], [762.5]]\n",
+      "63.mrxs\n",
+      "351\n",
+      "/home/osboxes/sharedSlides/Elton/63.xml\n",
+      "[[549.5], [646.5]]\n",
+      "[[566.13131313131328], [707.5]]\n",
+      "[[285.0], [1094.5]]\n",
+      "[[549.5], [707.5]]\n",
+      "[[348.0], [810.74891774891773]]\n",
+      "[[468.0], [728.0]]\n",
+      "[[407.0], [768.5]]\n",
+      "[[468.0], [829.5]]\n",
+      "[[529.0], [626.0]]\n",
+      "[[184.81140350877189], [1054.9122807017543]]\n",
+      "[[407.0], [850.0]]\n",
+      "[[244.70222222222225], [992.64888888888868]]\n",
+      "[[366.5], [870.5]]\n",
+      "[[426.12227074235807], [1072.8253275109173]]\n",
+      "[[529.0], [850.0]]\n",
+      "[[264.5], [1094.5]]\n",
+      "[[325.5], [952.0]]\n",
+      "[[346.0], [1074.0]]\n",
+      "[[529.0], [748.5]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "#resultCPannotationAnnotations.Location_Center_X\n",
+    "random.seed(seed=None)\n",
+    "\n",
+    "for imageIndex in range(resultCPannotationImage.shape[0]):\n",
+    "    print(resultCPannotationImage.FileName_DNA.loc[imageIndex])\n",
+    "    \n",
+    "    \n",
+    "    top = Element(\"Annotations\" , MicronsPerPixel=\"0.233333\")\n",
+    "    doc = SubElement(top,\"Annotation\",Id=\"1\", Name=\"\", ReadOnly=\"0\" ,NameReadOnly=\"0\" ,LineColorReadOnly=\"0\", Incremental=\"0\", Type=\"4\",LineColor=\"65280\", Visible=\"1\", Selected=\"1\" ,MarkupImagePath=\"\", MacroName=\"\")\n",
+    "    docAttributes = SubElement(doc, \"Attributes\")\n",
+    "    docRegions = SubElement(doc, \"Regions\")\n",
+    "    docPlots = SubElement(doc, \"Plots\")\n",
+    "\n",
+    "    docRegionsHeaders = SubElement(docRegions, \"RegionAttributeHeaders\")\n",
+    "    \n",
+    "    # find all annotations related to the slide\n",
+    "    indexRawAnnotation = np.where(resultCPannotationAnnotations.ImageNumber == (imageIndex+1))[0]\n",
+    "    #indexFilteredAnnotations = np.where((resultCPannotationAnnotations.ImageNumber == (imageIndex+1)) \n",
+    "    #                                    & (resultCPannotationAnnotations.Intensity_MeanIntensity_OrigGray>0) \n",
+    "    #                                    & (resultCPannotationAnnotations.Intensity_UpperQuartileIntensity_OrigGray<0.9) \n",
+    "    #                                   & (resultCPannotationAnnotations.AreaShape_Area>128) )[0]\n",
+    "    \n",
+    "    print(indexRawAnnotation.__len__())\n",
+    "    \n",
+    "    filenameXML = str(os.path.join(resultCPannotationImage.PathName_DNA.loc[imageIndex],resultCPannotationImage.FileName_DNA.loc[imageIndex]))\n",
+    "    filenameXML = filenameXML.replace(\".mrxs\",\".xml\")\n",
+    "    print(filenameXML)\n",
+    "    \n",
+    "    # random selection of 20 regions\n",
+    "    indexAnnotationRandom = indexRawAnnotation.copy()\n",
+    "    random.shuffle(indexAnnotationRandom)\n",
+    "    indexAnnotationRandomTop20 = indexAnnotationRandom\n",
+    "    \n",
+    "    itAnn = 0 \n",
+    "    zoomFactorX = 255\n",
+    "    zoomFactorY = 255\n",
+    "    shiftFactorX =0\n",
+    "    #shiftFactorY =-100000\n",
+    "    shiftFactorY =-95000\n",
+    "    \n",
+    "    # to itereate over and repeat for each circle\n",
+    "    \n",
+    "    for indexAnn in indexAnnotationRandomTop20[1:20]:\n",
+    "        \n",
+    "        # get region center x,y\n",
+    "        annotY = resultCPannotationAnnotations.Location_Center_Y.iloc[indexAnn]\n",
+    "        annotX = resultCPannotationAnnotations.Location_Center_X.iloc[indexAnn]\n",
+    "        \n",
+    "        print([[annotX],[annotY]])\n",
+    "        \n",
+    "        docRegionElement = SubElement(docRegions,\"Region\", Id=str(itAnn+1), Type=\"2\", Zoom=\"1\", Selected=\"0\", \n",
+    "          ImageLocation=\"\", ImageFocus=\"0\", Length=\"26203.4\", Area=\"54372313.8\", \n",
+    "          LengthMicrons=\"6114.1\", AreaMicrons=\"2960270.4\", Text=\"\", NegativeROA=\"0\", \n",
+    "          InputRegionId=\"0\", Analyze=\"0\", DisplayId=str(itAnn+1))\n",
+    "        childrenRegionElement = [Element('Attributes')]\n",
+    "        docRegionElement.extend(childrenRegionElement)\n",
+    "        docRegionElementVertices = SubElement(docRegionElement,\"Vertices\")\n",
+    "        docRegionElementVertexes = [Element('Vertex', X=str(annotX*zoomFactorX-2000+shiftFactorX),Y=str(annotY*zoomFactorY+-2000+shiftFactorY)) , \n",
+    "          Element('Vertex', X=str(annotX*zoomFactorX+2000+shiftFactorX),Y=str(annotY*zoomFactorY+2000+shiftFactorY))]\n",
+    "        docRegionElementVertices.extend(docRegionElementVertexes)\n",
+    "        itAnn = itAnn + 1\n",
+    "\n",
+    "    childrenHeaders = [Element('AttributeHeader', Name=\"Region\",Id=\"9999\",ColumnWidth=\"-1\") , \n",
+    "        Element('AttributeHeader', Name=\"Length\",Id=\"9999\",ColumnWidth=\"-1\") ,\n",
+    "        Element('AttributeHeader', Name=\"Length\",Id=\"9999\",ColumnWidth=\"-1\"),\n",
+    "        Element('AttributeHeader', Name=\"Area\",Id=\"9999\",ColumnWidth=\"-1\"),\n",
+    "        Element('AttributeHeader', Name=\"Text\",Id=\"9999\",ColumnWidth=\"-1\"),\n",
+    "        Element('AttributeHeader', Name=\"InflamationAnnotation\",Id=\"9999\",ColumnWidth=\"-1\")]\n",
+    "\n",
+    "    #docAttributes.extend(children)\n",
+    "    docRegionsHeaders.extend(childrenHeaders)\n",
+    "\n",
+    "    #ElementTree(top).write(\"/home/osboxes/sharedSlides/Elton/filename.xml\")\n",
+    "    ElementTree(top).write(filenameXML)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 121,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0 3 0]\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "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\nrVSrI8m48fExLrrkcn7zt36Pq677RE9jjI+PLR97dKK1z613LZ3TzNQRbrhlDw8//FUAnp5+ir/9\nQlw0/2p1hNe+5TJ27bqt6zlWqyNcvG37snmQVtNK/9VJSepo89C5XcVt2rJ10e1KjJG3cXAoOY9U\n3ydqjtKJ5CsLkiQpyWJBkiQlWSxIkqQkiwVJkpRksSBJkpIsFiRJUpLFgiRJSrJYkCRJSRYLkiQp\nyWJBkiQlWSxIkqQkiwVJkpRksSBJkpIsFiRJUpLFgiRJSrJYkCRJSRYLkiQpyWJBkiQlWSxIkqQk\niwVJkpRksSBJkpIsFk4xtVqNSmWYWq222lPRSaDdejneNZTqc2pqihgPdNyv07Yy49br9WVj6/V6\n17F5840Ghw8/0vPc8jmp1+vs3buHanU0GSetBRYLp5hqdYSLt22nWh1ptVUqw1Qqw6s4K61V7dZL\nu7a8ffu+sZ7ara1Un+9973au3HEjADNHJ5bsd+WOG5e0lz2W8fGxZWPHx8e4eNt2du26rdQYT08/\nxa59h5a0L3eNjY4uzcn4+BgXXXI5V133iSXHUK2OeN1qTbFYOAVtHjp3taegk0i79XK8ayjV56Yt\nWzvul9rW67j9iM3rdY7txtu0ZeuS/rx+tRZZLEiSpCSLBUmSlGSxIEmSkiwWJElSksWCJElKsliQ\nJElJFguSJClpQ9kdQgg/CXwIuD3G+OrCtl8Gfhf4NiACvxtj/Hw/JipJklZHqVcWQgiXANcAX26z\n7SXAB4HfBs4B3gX8bQjhm49/mpIkabWUfRtiGrgQaPf7VH8D+EyM8dYYYy3G+FFgBPjV45yjJEla\nRaWKhRjje2KM/9xh88uBfYW2fcD39DIxSZK0NpT+zELC2UDxL8A8AXx3mU4GBvzMZRlZvtrdbtiw\nuC17fLor5up0llov+bZ8+/r164DmtmIO84/b9dncd+kcUn112qfT/ll8fr9iW7uYdrqJa7eOOo2T\nn2uxz+IxZU7H69ZrtLyVzlU/iwWA9JXXhaGhwX7M47ST5S1/u3XrlkVt2WM1udbS6yXflnfmmZuA\n5noq5jD/uF2fg4Mb284h1Vc23nLjFOPz+xXbstt282l3rKm4dusoiy+Ol59r8biKx5Q5na9br9G1\no5/FwuM0X13IOxt4rEwnk5PTzM01+japU93AwHqGhgZbeZucnAaaeZyYONq6D7Qen+6KOTudpdZL\n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\n",
+      "text/plain": [
+       "<matplotlib.figure.Figure at 0x7ffba50c3650>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "x = (np.array(resultCPannotationAnnotations.Intensity_MeanIntensity_OrigGray).flatten())\n",
+    "x = x[numpy.logical_not(numpy.isnan(x))]\n",
+    "binHist = plt.hist(x,bins=512,normed=True)\n",
+    "\n",
+    "print(np.random.randint(0, high=None, size=10, dtype='l'))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "from xml.etree.ElementTree import Element, tostring\n",
+    "from xml.etree.ElementTree import Element, SubElement, Comment, ElementTree\n",
+    "\n",
+    "top = Element(\"Annotations\" , MicronsPerPixel=\"0.233333\")\n",
+    "doc = SubElement(top,\"Annotation\",Id=\"1\", Name=\"\", ReadOnly=\"0\" ,NameReadOnly=\"0\" ,LineColorReadOnly=\"0\", Incremental=\"0\", Type=\"4\",LineColor=\"65280\", Visible=\"1\", Selected=\"1\" ,MarkupImagePath=\"\", MacroName=\"\")\n",
+    "docAttributes = SubElement(doc, \"Attributes\")\n",
+    "docRegions = SubElement(doc, \"Regions\")\n",
+    "docPlots = SubElement(doc, \"Plots\")\n",
+    "\n",
+    "docRegionsHeaders = SubElement(docRegions, \"RegionAttributeHeaders\")\n",
+    "\n",
+    "\n",
+    "# to itereate over and repeat for each circle\n",
+    "docRegionElement = SubElement(docRegions,\"Region\", Id=\"1\", Type=\"2\", Zoom=\"0.004199\", Selected=\"0\", \n",
+    "  ImageLocation=\"\", ImageFocus=\"0\", Length=\"26203.4\", Area=\"54372313.8\", \n",
+    "  LengthMicrons=\"6114.1\", AreaMicrons=\"2960270.4\", Text=\"\", NegativeROA=\"0\", \n",
+    "  InputRegionId=\"0\", Analyze=\"0\", DisplayId=\"1\")\n",
+    "childrenRegionElement = [Element('Attributes')]\n",
+    "docRegionElement.extend(childrenRegionElement)\n",
+    "docRegionElementVertices = SubElement(docRegionElement,\"Vertices\")\n",
+    "docRegionElementVertexes = [Element('Vertex', X=\"85734.168714\",Y=\"134554.560933\") , \n",
+    "  Element('Vertex', X=\"93593.107672\",Y=\"143366.098552\")]\n",
+    "docRegionElementVertices.extend(docRegionElementVertexes)\n",
+    "\n",
+    "childrenHeaders = [Element('AttributeHeader', Name=\"Region\",Id=\"9999\",ColumnWidth=\"-1\") , \n",
+    "  Element('AttributeHeader', Name=\"Length\",Id=\"9999\",ColumnWidth=\"-1\") ,\n",
+    "  Element('AttributeHeader', Name=\"Length\",Id=\"9999\",ColumnWidth=\"-1\"),\n",
+    "  Element('AttributeHeader', Name=\"Area\",Id=\"9999\",ColumnWidth=\"-1\"),\n",
+    "  Element('AttributeHeader', Name=\"Text\",Id=\"9999\",ColumnWidth=\"-1\"),\n",
+    "  Element('AttributeHeader', Name=\"BallooningAnnotation\",Id=\"9999\",ColumnWidth=\"-1\")]\n",
+    "\n",
+    "#docAttributes.extend(children)\n",
+    "docRegionsHeaders.extend(childrenHeaders)\n",
+    "\n",
+    "ElementTree(top).write(\"filename.xml\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 2",
+   "language": "python",
+   "name": "python2"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.5"
+  },
+  "toc": {
+   "colors": {
+    "hover_highlight": "#DAA520",
+    "navigate_num": "#000000",
+    "navigate_text": "#333333",
+    "running_highlight": "#FF0000",
+    "selected_highlight": "#FFD700",
+    "sidebar_border": "#EEEEEE",
+    "wrapper_background": "#FFFFFF"
+   },
+   "moveMenuLeft": true,
+   "nav_menu": {
+    "height": "12px",
+    "width": "252px"
+   },
+   "navigate_menu": true,
+   "number_sections": true,
+   "sideBar": true,
+   "threshold": 4,
+   "toc_cell": false,
+   "toc_section_display": "block",
+   "toc_window_display": false,
+   "widenNotebook": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}
